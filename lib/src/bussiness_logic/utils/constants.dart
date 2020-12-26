@@ -17,7 +17,7 @@ const SIZED_BOX_H24 = SizedBox(height: 24);
 const SIZED_BOX_H30 = SizedBox(height: 30);
 
 /// PADDING
-
+const PAD_ONLY_T16 = EdgeInsets.only(top: 16);
 const PAD_ONLY_T20 = EdgeInsets.only(top: 20);
 const PAD_ONLY_R20 = EdgeInsets.only(right: 20);
 const PAD_SYM_H10 = EdgeInsets.symmetric(horizontal: 10);
