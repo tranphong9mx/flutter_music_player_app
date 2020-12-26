@@ -15,8 +15,10 @@ const SIZED_BOX_H16 = SizedBox(height: 16);
 const SIZED_BOX_H20 = SizedBox(height: 20);
 const SIZED_BOX_H24 = SizedBox(height: 24);
 const SIZED_BOX_H30 = SizedBox(height: 30);
+const SIZED_BOX_H40 = SizedBox(height: 40);
 
 /// PADDING
+const PAD_ONLY_T12 = EdgeInsets.only(top: 12);
 const PAD_ONLY_T16 = EdgeInsets.only(top: 16);
 const PAD_ONLY_T20 = EdgeInsets.only(top: 20);
 const PAD_ONLY_R20 = EdgeInsets.only(right: 20);
@@ -42,3 +44,4 @@ const primaryWinFalExtraColor = Color(0xFFEFBF65);
 const primaryWinFalDarkColor = Color(0xFF576298);
 const secondaryWinFalColor = Color(0xFFD3839C);
 const secondaryWinFalDarkColor = Color(0xFFC83D6C);
+const primaryWinFalExtraDarkColor = Color(0xFF2A2455);
