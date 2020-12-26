@@ -22,4 +22,6 @@ final themeCustomed = ThemeData(
             fontSize: 14,
             fontWeight: FontWeight.w200),
         bodyText2: TextStyle(
-            letterSpacing: 1.2, color: primaryLightTextColor, fontSize: 12)));
+            letterSpacing: 1.2,
+            color: primaryLightBackgroundColor,
+            fontSize: 12)));

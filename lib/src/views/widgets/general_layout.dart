@@ -9,14 +9,12 @@ class GeneralPlayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _screenWidth = MediaQuery.of(context).size.width;
-    final _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             Container(
-                margin: PAD_ONLY_T16,
+                margin: PAD_ONLY_T12,
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     image: DecorationImage(
@@ -34,13 +32,13 @@ class GeneralPlayout extends StatelessWidget {
                     end: FractionalOffset.bottomCenter,
                     stops: [
                       0,
-                      .05,
+                      .02,
                       .15,
-                      .55,
+                      .5,
                       .6,
-                      .75,
+                      .7,
                       .8,
-                      1.0
+                      1
                     ],
                     colors: [
                       primaryWinFalDarkColor.withOpacity(1),
@@ -55,7 +53,7 @@ class GeneralPlayout extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+              padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -118,9 +116,105 @@ class GeneralPlayout extends StatelessWidget {
                           ],
                         ),
                         SIZED_BOX_H30,
-                      Row(children: [
-                        
-                      ],)
+                        Row(
+                          children: [
+                            Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationY(pi),
+                                child: SvgPicture.asset(
+                                    'assets/icons/repeat_icon.svg',
+                                    color: primaryLightBackgroundColor,
+                                    height: 20)),
+                            Spacer(),
+                            Transform.rotate(
+                              angle: -pi * 4 / 5,
+                              child: SvgPicture.asset(
+                                  'assets/icons/skip_icon.svg',
+                                  color: primaryLightBackgroundColor,
+                                  height: 20),
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(
+                              'assets/icons/previous_icon.svg',
+                              color: primaryLightBackgroundColor,
+                              height: 24,
+                            ),
+                            SIZED_BOX_W20,
+                            Container(
+                              width: 72,
+                              height: 72,
+                              decoration: BoxDecoration(
+                                  color: secondarySprSumDarkColor,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: primaryWinFalExtraDarkColor
+                                            .withOpacity(.8),
+                                        offset: Offset(0, 10),
+                                        blurRadius: 20)
+                                  ],
+                                  gradient: LinearGradient(
+                                      begin: FractionalOffset.topRight,
+                                      end: FractionalOffset.bottomLeft,
+                                      stops: [
+                                        0,
+                                        .15,
+                                        .6,
+                                        1
+                                      ],
+                                      colors: [
+                                        secondaryWinFalColor,
+                                        secondaryWinFalColor,
+                                        secondaryWinFalDarkColor,
+                                        secondaryWinFalDarkColor
+                                      ])),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  'assets/icons/pause_icon.svg',
+                                  color: primaryLightBackgroundColor,
+                                  width: 28,
+                                ),
+                              ),
+                            ),
+                            SIZED_BOX_W20,
+                            SvgPicture.asset('assets/icons/next_icon.svg',
+                                color: primaryLightBackgroundColor, height: 24),
+                            Spacer(),
+                            Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(pi)
+                                ..rotateZ(-pi * 4 / 5),
+                              child: SvgPicture.asset(
+                                  'assets/icons/skip_icon.svg',
+                                  color: primaryLightBackgroundColor,
+                                  height: 20),
+                            ),
+                            Spacer(),
+                            SvgPicture.asset('assets/icons/shuffle_icon.svg',
+                                color: primaryLightBackgroundColor, height: 20),
+                          ],
+                        ),
+                        SIZED_BOX_H40,
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/bluetooth_icon.svg',
+                              color: primaryLightBackgroundColor,
+                              height: 16,
+                            ),
+                            SIZED_BOX_W06,
+                            Text(
+                              'Matt\'s AirPods Pro',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(
+                              'assets/icons/playlist_icon.svg',
+                              color: primaryLightBackgroundColor,
+                              width: 20,
+                            )
+                          ],
+                        )
                       ],
                     ),
                   )
