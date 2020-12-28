@@ -15,10 +15,12 @@ class GeneralPlayout extends StatefulWidget {
   _GeneralPlayoutState createState() => _GeneralPlayoutState();
 }
 
-class _GeneralPlayoutState extends State<GeneralPlayout> {
+class _GeneralPlayoutState extends State<GeneralPlayout>
+    with TickerProviderStateMixin {
   bool _playing;
   AudioPlayer _player;
   AudioCache _cache;
+  AnimationController _animationController;
   final _playList = <String>[
     'audio/chillhop_winter/5 am.mp3',
     'audio/chillhop_winter/Ocean View.mp3',
@@ -27,13 +29,15 @@ class _GeneralPlayoutState extends State<GeneralPlayout> {
   int _position;
   int _duration;
   int _currentSong = 0;
-  String _playOrPause = 'assets/icons/play_icon.svg';
   bool _repeatAllOrOne = true;
 
   @override
   void initState() {
     _player = AudioPlayer();
     _cache = AudioCache(fixedPlayer: _player);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+
     if (Platform.isIOS) {
       if (_cache.fixedPlayer != null) {
         _cache.fixedPlayer.startHeadlessService();
@@ -43,22 +47,17 @@ class _GeneralPlayoutState extends State<GeneralPlayout> {
       debugPrint(event.toString());
       switch (event) {
         case AudioPlayerState.PLAYING:
-          setState(() {
-            _playOrPause = 'assets/icons/pause_icon.svg';
-          });
+          _animationController.forward();
           break;
         case AudioPlayerState.COMPLETED:
           setState(() {
             if (_repeatAllOrOne) ++_currentSong;
-            _playOrPause = 'assets/icons/play_icon.svg';
           });
+          _animationController.reverse();
           resetAll();
-          playMusic(_playList[_currentSong % _playList.length]);
           break;
         default:
-          setState(() {
-            _playOrPause = 'assets/icons/play_icon.svg';
-          });
+          _animationController.reverse();
           break;
       }
     });
@@ -92,7 +91,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout> {
     setState(() => _playing = !_playing);
   }
 
-  resetAll() {
+  resetAll() async {
     setState(() {
       _duration = 0;
       _position = 0;
@@ -100,6 +99,8 @@ class _GeneralPlayoutState extends State<GeneralPlayout> {
     });
     _getDuration(_playList[_currentSong % _playList.length])
         .then((value) => setState(() => _duration = value));
+    await Future.delayed(Duration(milliseconds: 600));
+    playMusic(_playList[_currentSong % _playList.length]);
   }
 
   previousMusic() {
@@ -320,12 +321,12 @@ class _GeneralPlayoutState extends State<GeneralPlayout> {
                                             secondaryWinFalDarkColor
                                           ])),
                                   child: Center(
-                                    child: SvgPicture.asset(
-                                      _playOrPause,
-                                      color: primaryLightBackgroundColor,
-                                      width: 28,
-                                    ),
-                                  ),
+                                      child: AnimatedIcon(
+                                    progress: _animationController,
+                                    icon: AnimatedIcons.play_pause,
+                                    size: 40,
+                                    color: primaryLightBackgroundColor,
+                                  )),
                                 )),
                             SIZED_BOX_W20,
                             GestureDetector(
