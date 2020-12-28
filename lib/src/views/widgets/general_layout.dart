@@ -1,11 +1,137 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/constants.dart';
+import 'package:flutter_music_player_app/src/views/widgets/music_wave.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class GeneralPlayout extends StatelessWidget {
+class GeneralPlayout extends StatefulWidget {
   const GeneralPlayout({Key key}) : super(key: key);
+
+  @override
+  _GeneralPlayoutState createState() => _GeneralPlayoutState();
+}
+
+class _GeneralPlayoutState extends State<GeneralPlayout> {
+  bool _playing;
+  AudioPlayer _player;
+  AudioCache _cache;
+  final _playList = <String>[
+    'audio/chillhop_winter/5 am.mp3',
+    'audio/chillhop_winter/Ocean View.mp3',
+    'audio/chillhop_winter/Frozen Firs.mp3'
+  ];
+  int _position;
+  int _duration;
+  int _currentSong = 0;
+  String _playOrPause = 'assets/icons/play_icon.svg';
+  bool _repeatAllOrOne = true;
+
+  @override
+  void initState() {
+    _player = AudioPlayer();
+    _cache = AudioCache(fixedPlayer: _player);
+    if (Platform.isIOS) {
+      if (_cache.fixedPlayer != null) {
+        _cache.fixedPlayer.startHeadlessService();
+      }
+    }
+    _player.onPlayerStateChanged.listen((event) {
+      debugPrint(event.toString());
+      switch (event) {
+        case AudioPlayerState.PLAYING:
+          setState(() {
+            _playOrPause = 'assets/icons/pause_icon.svg';
+          });
+          break;
+        case AudioPlayerState.COMPLETED:
+          setState(() {
+            if (_repeatAllOrOne) ++_currentSong;
+            _playOrPause = 'assets/icons/play_icon.svg';
+          });
+          resetAll();
+          playMusic(_playList[_currentSong % _playList.length]);
+          break;
+        default:
+          setState(() {
+            _playOrPause = 'assets/icons/play_icon.svg';
+          });
+          break;
+      }
+    });
+    _player.onAudioPositionChanged.listen((event) {
+      setState(() => _position = event.inSeconds);
+    });
+
+    // getDuration after set all AudioPlayer to avoid error
+    resetAll();
+  }
+
+  Future<int> _getDuration(String fileUrl) async {
+    File audio = await _cache.load(fileUrl);
+    _player.setUrl(audio.path);
+    // Return duration as milliseconds
+    return ((await Future.delayed(
+                Duration(milliseconds: 300), () => _player.getDuration())) /
+            1000)
+        .floor();
+  }
+
+  _getFormatTimer(int timer) =>
+      '${(timer / 60).floor().toString().padLeft(2, '0')}.${(timer % 60).toString().padLeft(2, '0')}';
+
+  playMusic(fileUrl) {
+    if (!_playing) {
+      _cache.play(fileUrl);
+    } else {
+      _player.pause();
+    }
+    setState(() => _playing = !_playing);
+  }
+
+  resetAll() {
+    setState(() {
+      _duration = 0;
+      _position = 0;
+      _playing = false;
+    });
+    _getDuration(_playList[_currentSong % _playList.length])
+        .then((value) => setState(() => _duration = value));
+  }
+
+  previousMusic() {
+    setState(() {
+      if (_currentSong > 0) --_currentSong;
+    });
+    _player.stop();
+    resetAll();
+  }
+
+  nextMusic() {
+    setState(() {
+      ++_currentSong;
+    });
+    _player.stop();
+    resetAll();
+  }
+
+  previousSkipMusic(int seconds) => _player
+      .seek(Duration(seconds: _position >= seconds ? _position - seconds : 0));
+
+  nextSkipMusic(int seconds) => _player.seek(Duration(
+      seconds:
+          _position <= (_duration - 10) ? _position + seconds : _duration));
+
+  shuffleMusic() => _playList.shuffle();
+
+  repeatMusic() {
+    setState(() {
+      _repeatAllOrOne = !_repeatAllOrOne;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +159,8 @@ class GeneralPlayout extends StatelessWidget {
                     stops: [
                       0,
                       .02,
-                      .15,
-                      .5,
+                      .12,
+                      .55,
                       .6,
                       .7,
                       .8,
@@ -46,7 +172,7 @@ class GeneralPlayout extends StatelessWidget {
                       primaryWinFalDarkColor.withOpacity(0),
                       Colors.transparent,
                       primaryWinFalDarkColor.withOpacity(0),
-                      primaryWinFalDarkColor.withOpacity(.8),
+                      primaryWinFalDarkColor.withOpacity(1),
                       primaryWinFalDarkColor.withOpacity(1),
                       primaryWinFalDarkColor,
                     ]),
@@ -104,94 +230,131 @@ class GeneralPlayout extends StatelessWidget {
                         SIZED_BOX_H20,
                         Row(
                           children: [
-                            Text(
-                              '0.47',
-                              style: Theme.of(context).textTheme.bodyText2,
+                            SizedBox(
+                              width: 64,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  _getFormatTimer(_position),
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
                             ),
-                            Spacer(),
-                            Text(
-                              '-1.48',
-                              style: Theme.of(context).textTheme.bodyText2,
+                            MusicWave(
+                              duration: _duration,
+                              position: _position,
+                            ),
+                            SizedBox(
+                              width: 64,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '-${_getFormatTimer(_duration - _position)}',
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
                             )
                           ],
                         ),
                         SIZED_BOX_H30,
                         Row(
                           children: [
-                            Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(pi),
-                                child: SvgPicture.asset(
-                                    'assets/icons/repeat_icon.svg',
-                                    color: primaryLightBackgroundColor,
-                                    height: 20)),
-                            Spacer(),
-                            Transform.rotate(
-                              angle: -pi * 4 / 5,
+                            GestureDetector(
+                              onTap: () => repeatMusic(),
                               child: SvgPicture.asset(
-                                  'assets/icons/skip_icon.svg',
+                                  _repeatAllOrOne
+                                      ? 'assets/icons/repeat_all_icon.svg'
+                                      : 'assets/icons/repeat_one_icon.svg',
                                   color: primaryLightBackgroundColor,
                                   height: 20),
                             ),
                             Spacer(),
-                            SvgPicture.asset(
-                              'assets/icons/previous_icon.svg',
-                              color: primaryLightBackgroundColor,
-                              height: 24,
-                            ),
-                            SIZED_BOX_W20,
-                            Container(
-                              width: 72,
-                              height: 72,
-                              decoration: BoxDecoration(
-                                  color: secondarySprSumDarkColor,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: primaryWinFalExtraDarkColor
-                                            .withOpacity(.8),
-                                        offset: Offset(0, 10),
-                                        blurRadius: 20)
-                                  ],
-                                  gradient: LinearGradient(
-                                      begin: FractionalOffset.topRight,
-                                      end: FractionalOffset.bottomLeft,
-                                      stops: [
-                                        0,
-                                        .15,
-                                        .6,
-                                        1
-                                      ],
-                                      colors: [
-                                        secondaryWinFalColor,
-                                        secondaryWinFalColor,
-                                        secondaryWinFalDarkColor,
-                                        secondaryWinFalDarkColor
-                                      ])),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/icons/pause_icon.svg',
-                                  color: primaryLightBackgroundColor,
-                                  width: 28,
-                                ),
+                            GestureDetector(
+                                onTap: () => previousSkipMusic(10),
+                                child: Transform.rotate(
+                                  angle: -pi * 4 / 5,
+                                  child: SvgPicture.asset(
+                                      'assets/icons/skip_icon.svg',
+                                      color: primaryLightBackgroundColor,
+                                      height: 20),
+                                )),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () => previousMusic(),
+                              child: SvgPicture.asset(
+                                'assets/icons/previous_icon.svg',
+                                color: primaryLightBackgroundColor,
+                                height: 24,
                               ),
                             ),
                             SIZED_BOX_W20,
-                            SvgPicture.asset('assets/icons/next_icon.svg',
-                                color: primaryLightBackgroundColor, height: 24),
-                            Spacer(),
-                            Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(pi)
-                                ..rotateZ(-pi * 4 / 5),
+                            GestureDetector(
+                                onTap: () => playMusic(
+                                    _playList[_currentSong % _playList.length]),
+                                child: Container(
+                                  width: 72,
+                                  height: 72,
+                                  decoration: BoxDecoration(
+                                      color: secondarySprSumDarkColor,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: primaryWinFalExtraDarkColor
+                                                .withOpacity(.8),
+                                            offset: Offset(0, 10),
+                                            blurRadius: 20)
+                                      ],
+                                      gradient: LinearGradient(
+                                          begin: FractionalOffset.topRight,
+                                          end: FractionalOffset.bottomLeft,
+                                          stops: [
+                                            0,
+                                            .15,
+                                            .6,
+                                            1
+                                          ],
+                                          colors: [
+                                            secondaryWinFalColor,
+                                            secondaryWinFalColor,
+                                            secondaryWinFalDarkColor,
+                                            secondaryWinFalDarkColor
+                                          ])),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      _playOrPause,
+                                      color: primaryLightBackgroundColor,
+                                      width: 28,
+                                    ),
+                                  ),
+                                )),
+                            SIZED_BOX_W20,
+                            GestureDetector(
+                              onTap: () => nextMusic(),
                               child: SvgPicture.asset(
-                                  'assets/icons/skip_icon.svg',
+                                  'assets/icons/next_icon.svg',
+                                  color: primaryLightBackgroundColor,
+                                  height: 24),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                                onTap: () => nextSkipMusic(10),
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationY(pi)
+                                    ..rotateZ(-pi * 4 / 5),
+                                  child: SvgPicture.asset(
+                                      'assets/icons/skip_icon.svg',
+                                      color: primaryLightBackgroundColor,
+                                      height: 20),
+                                )),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () => shuffleMusic(),
+                              child: SvgPicture.asset(
+                                  'assets/icons/shuffle_icon.svg',
                                   color: primaryLightBackgroundColor,
                                   height: 20),
                             ),
-                            Spacer(),
-                            SvgPicture.asset('assets/icons/shuffle_icon.svg',
-                                color: primaryLightBackgroundColor, height: 20),
                           ],
                         ),
                         SIZED_BOX_H40,
