@@ -13,6 +13,7 @@ import 'package:flutter_music_player_app/src/bussiness_logic/models/song_info.da
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/constants.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/theme_customed.dart';
 import 'package:flutter_music_player_app/src/views/ui/chillhop_general_layout.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 
 class ChillHopMusicPlayer extends StatelessWidget {
@@ -63,9 +64,10 @@ class ChillHopMusicPlayer extends StatelessWidget {
             fullTransitionValue: 300,
             enableSlideIcon: true,
             waveType: WaveType.liquidReveal,
-            slideIconWidget: Icon(
-              Icons.arrow_back_ios,
-              color: primaryLightTextColor.withOpacity(0.8),
+            slideIconWidget: Padding(
+              padding: PAD_ONLY_R20,
+              child: SvgPicture.asset('assets/icons/backward_icon.svg',
+                  color: primaryLightTextColor.withOpacity(0.8)),
             ),
             positionSlideIcon: 0.3));
   }
