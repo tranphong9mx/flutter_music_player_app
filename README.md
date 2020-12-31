@@ -1,16 +1,19 @@
-# flutter_music_player_app
+# Flutter Music Player (Chillhop UI Cover)
 
-A new Flutter project.
+## About
+This is a music player that covered UX/UI was designed by [<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_artitst.png?raw=true" width="60" >](https://www.facebook.com/ekkodesignas/) on [Ekkodesign.no](https://www.ekkodesign.no/)<br /><br />
+[<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_chillhop_music_player_thumbnail.png?raw=true" width="720" >](https://www.ekkodesign.no/)
 
-## Getting Started
+## Layouts
+### ✨ (4 Seasons - 3 Songs/ 1 Season) ✨
+- Music from assets folder (Get free from [<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_Chillhop_white.png?raw=true" width="60" >](https://chillhop.com/))
+- A bunch of function buttons at the bottom: (repeat, skip, next & prev song, shuffle, play & pause)
+- Some buttons haven't handled yet
+- Can change season and get new playlist by horizontal swipe
 
-This project is a starting point for a Flutter application.
+## Demo
+[![Flutter Music Player](https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_chillhop_music_player.gif?raw=true)](http://www.youtube.com/watch?v=YjTZdafdzGw)
 
-A few resources to get you started if this is your first Flutter project:
+## Thank you
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I pleasure to receive your responses and comments! <br />Please tell me if anything have a problem. <br />✨Many thanks!✨
