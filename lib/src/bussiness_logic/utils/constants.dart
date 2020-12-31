@@ -32,16 +32,19 @@ const PAD_SYM_V20 = EdgeInsets.symmetric(vertical: 20);
 
 const primaryLightTextColor = Color(0xFFFFFFFF);
 const primaryLightBackgroundColor = Color(0xFFD8E5EB);
-const primarySprSumColor = Color(0xFF5CA9BB);
-const primarySprSumLightColor = Color(0xFFA0D4DF);
-const primarySprSumDarkColor = Color(0xFF576298);
-const secondartSprSumColor = Color(0xFFFDB9D0);
-const secondarySprSumDarkColor = Color(0xFF542C8F);
 
-const primaryWinFalLightColor = Color(0xFFF9D7D8);
-const primaryWinFalColor = Color(0xFF99D2DD);
-const primaryWinFalExtraColor = Color(0xFFEFBF65);
-const primaryWinFalDarkColor = Color(0xFF576298);
-const secondaryWinFalColor = Color(0xFFD3839C);
-const secondaryWinFalDarkColor = Color(0xFFC83D6C);
-const primaryWinFalExtraDarkColor = Color(0xFF2A2455);
+const chillhopSprSumColor = Color(0xFF5CA9BB);
+const chillhopSprSumLightColor = Color(0xFFA0D4DF);
+const chillhopSprSumExtraLightColor = Color(0xFFD2E7E8);
+const chillhopSprSumDarkColor = Color(0xFF576298);
+const chillhopSprSumSubColor = Color(0xFFFDB9D0);
+const chillhopSprSumSubDarkColor = Color(0xFF542C8F);
+const chillhopSprSumSubLightColor = Color(0xFF8357B0);
+
+const chillhopWinFalColor = Color(0xFF99D2DD);
+const chillhopWinFalLightColor = Color(0xFFF9D7D8);
+const chillhopWinFalDarkColor = Color(0xFF576298);
+const chillhopWinFalSubColor = Color(0xFFD3839C);
+const chillhopWinFalSubDarkColor = Color(0xFFC93D6C);
+const chillhopWinFalExtraColor = Color(0xFFEFBF65);
+const chillhopWinFalExtraDarkColor = Color(0xFF2A2455);
