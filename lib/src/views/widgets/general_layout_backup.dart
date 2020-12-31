@@ -168,14 +168,14 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                       1
                     ],
                     colors: [
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(0),
+                      chillhopWinFalDarkColor.withOpacity(1),
+                      chillhopWinFalDarkColor.withOpacity(1),
+                      chillhopWinFalDarkColor.withOpacity(0),
                       Colors.transparent,
-                      primaryWinFalDarkColor.withOpacity(0),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor,
+                      chillhopWinFalDarkColor.withOpacity(0),
+                      chillhopWinFalDarkColor.withOpacity(1),
+                      chillhopWinFalDarkColor.withOpacity(1),
+                      chillhopWinFalDarkColor,
                     ]),
               ),
             ),
@@ -198,7 +198,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                             child: SvgPicture.asset(
                               'assets/icons/more_icon.svg',
                               width: 20,
-                              color: primaryWinFalExtraColor,
+                              color: chillhopWinFalExtraColor,
                             ),
                           )),
                     ],
@@ -209,7 +209,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                       child: SvgPicture.asset(
                         'assets/icons/backward_icon.svg',
                         width: 10,
-                        color: primaryWinFalExtraColor,
+                        color: chillhopWinFalExtraColor,
                       )),
                   Spacer(),
                   Container(
@@ -296,11 +296,11 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                   width: 72,
                                   height: 72,
                                   decoration: BoxDecoration(
-                                      color: secondarySprSumDarkColor,
+                                      color: chillhopSprSumDarkColor,
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                            color: primaryWinFalExtraDarkColor
+                                            color: chillhopWinFalExtraDarkColor
                                                 .withOpacity(.8),
                                             offset: Offset(0, 10),
                                             blurRadius: 20)
@@ -315,10 +315,10 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                             1
                                           ],
                                           colors: [
-                                            secondaryWinFalColor,
-                                            secondaryWinFalColor,
-                                            secondaryWinFalDarkColor,
-                                            secondaryWinFalDarkColor
+                                            chillhopWinFalColor,
+                                            chillhopWinFalColor,
+                                            chillhopWinFalDarkColor,
+                                            chillhopWinFalDarkColor
                                           ])),
                                   child: Center(
                                       child: AnimatedIcon(

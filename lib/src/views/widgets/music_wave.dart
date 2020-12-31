@@ -6,7 +6,7 @@ class MusicWave extends StatefulWidget {
       {Key key,
       this.duration = 0,
       this.position = 0,
-      this.activeColor = primaryWinFalExtraDarkColor,
+      this.activeColor = chillhopWinFalExtraDarkColor,
       this.inActiveColor = primaryLightBackgroundColor})
       : super(key: key);
 

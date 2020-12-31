@@ -6,25 +6,32 @@ import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_musi
 import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_music_player_bloc.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_position_song/position_song_cubit.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_repeat_all_one/repeat_all_one_cubit.dart';
+import 'package:flutter_music_player_app/src/bussiness_logic/models/song_info.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/constants.dart';
 import 'package:flutter_music_player_app/src/views/widgets/music_effect_button.dart';
 import 'package:flutter_music_player_app/src/views/widgets/music_wave.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class GeneralPlayout extends StatefulWidget {
-  const GeneralPlayout({Key key}) : super(key: key);
-
+class ChillhopGeneralPlayout extends StatefulWidget {
+  const ChillhopGeneralPlayout(
+      {Key key,
+      @required this.seasonTheme,
+      @required this.backgroundImage,
+      @required this.playlist})
+      : super(key: key);
+  final Map<String, Color> seasonTheme;
+  final String backgroundImage;
+  final List<SongInfo> playlist;
   @override
-  _GeneralPlayoutState createState() => _GeneralPlayoutState();
+  _ChillhopGeneralPlayoutState createState() => _ChillhopGeneralPlayoutState();
 }
 
-class _GeneralPlayoutState extends State<GeneralPlayout>
+class _ChillhopGeneralPlayoutState extends State<ChillhopGeneralPlayout>
     with TickerProviderStateMixin {
   AnimationController _animationController;
   MusicPlayerBloc musicBloc;
 
-  // RESOURCES
-  String _backgroundImage = 'assets/images/chillhop_winter.png';
+  // ICONS
   String _moreIcon = 'assets/icons/more_icon.svg';
   String _backwardIcon = 'assets/icons/backward_icon.svg';
   String _repeatAllIcon = 'assets/icons/repeat_all_icon.svg';
@@ -51,7 +58,17 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
 
   @override
   Widget build(BuildContext context) {
-    musicBloc = BlocProvider.of<MusicPlayerBloc>(context);
+    musicBloc = BlocProvider.of<MusicPlayerBloc>(context)
+      ..setPlaylist(widget.playlist);
+    String _backgroundImage = widget.backgroundImage;
+    // COLORS
+    Color _bgGradientColor = widget.seasonTheme['bgGradientColor'];
+    Color _icTopBarColor = widget.seasonTheme['icTopBarColor'];
+    Color _titleTopBarColor = widget.seasonTheme['titleTopBarColor'];
+    Color _btnTextColor = widget.seasonTheme['btnTextColor'];
+    Color _waveActiveColor = widget.seasonTheme['waveActiveColor'];
+    Color _bgLightPlayBtnColor = widget.seasonTheme['bgLightPlayBtnColor'];
+    Color _bgDarkPlayBtnColor = widget.seasonTheme['bgDarkPlayBtnColor'];
 
     return SafeArea(
       child: Scaffold(
@@ -93,14 +110,14 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                       1
                     ],
                     colors: [
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(0),
+                      _bgGradientColor.withOpacity(1),
+                      _bgGradientColor.withOpacity(1),
+                      _bgGradientColor.withOpacity(0),
                       Colors.transparent,
-                      primaryWinFalDarkColor.withOpacity(0),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor.withOpacity(1),
-                      primaryWinFalDarkColor,
+                      _bgGradientColor.withOpacity(0),
+                      _bgGradientColor.withOpacity(1),
+                      _bgGradientColor.withOpacity(1),
+                      _bgGradientColor,
                     ]),
               ),
             ),
@@ -116,7 +133,10 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                       Center(
                           child: Text(
                         'Chillhop Essentials Winter 2020',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .copyWith(color: _titleTopBarColor),
                       )),
 
                       // Stack can easy to custom none-symmetrical UI
@@ -127,7 +147,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                             child: SvgPicture.asset(
                               _moreIcon,
                               width: 20,
-                              color: primaryWinFalExtraColor,
+                              color: _icTopBarColor,
                             ),
                           )),
                     ],
@@ -140,7 +160,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                       child: SvgPicture.asset(
                         _backwardIcon,
                         width: 10,
-                        color: primaryWinFalExtraColor,
+                        color: _icTopBarColor,
                       )),
                   Spacer(),
 
@@ -188,14 +208,19 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: _nameSong,
-                                    style:
-                                        Theme.of(context).textTheme.headline6),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                            color:
+                                                _btnTextColor.withOpacity(1))),
                                 TextSpan(
                                     text: '\n$_authorSong',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
-                                        .copyWith(height: 2))
+                                        .copyWith(
+                                            color: _btnTextColor, height: 2))
                               ])),
                           SIZED_BOX_H20,
 
@@ -214,13 +239,17 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                             .getFormatTimer(state.position),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText2,
+                                            .bodyText2
+                                            .copyWith(color: _btnTextColor),
                                       ),
                                     ),
                                   ),
                                   MusicWave(
-                                      duration: _duration,
-                                      position: state.position),
+                                    duration: _duration,
+                                    position: state.position,
+                                    activeColor: _waveActiveColor,
+                                    inActiveColor: _btnTextColor.withOpacity(.6),
+                                  ),
                                   SizedBox(
                                     width: 64,
                                     child: Align(
@@ -231,7 +260,8 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                             minus: true),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText2,
+                                            .bodyText2
+                                            .copyWith(color: _btnTextColor),
                                       ),
                                     ),
                                   )
@@ -255,7 +285,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                             repeat is RepeatAll
                                                 ? _repeatAllIcon
                                                 : _repeatOneIcon,
-                                            color: primaryLightBackgroundColor,
+                                            color: _btnTextColor,
                                             height: 20),
                                         type: MusicButtonType.REPEAT,
                                       )),
@@ -269,8 +299,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                   child: Transform.rotate(
                                       angle: -pi * 4 / 5,
                                       child: SvgPicture.asset(_skipIcon,
-                                          color: primaryLightBackgroundColor,
-                                          height: 20)),
+                                          color: _btnTextColor, height: 20)),
                                   type: MusicButtonType.SKIP_PREV),
                               Spacer(),
 
@@ -282,7 +311,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                 },
                                 child: SvgPicture.asset(
                                   _prevIcon,
-                                  color: primaryLightBackgroundColor,
+                                  color: _btnTextColor,
                                   height: 24,
                                 ),
                                 type: MusicButtonType.PREV_SONG,
@@ -293,14 +322,14 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                               MusicEffectButton(
                                   onTap: () => playMusic(state),
                                   child: Container(
-                                    width: 76,
-                                    height: 76,
+                                    width: 72,
+                                    height: 72,
                                     decoration: BoxDecoration(
-                                        color: secondarySprSumDarkColor,
+                                        color: _bgDarkPlayBtnColor,
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
-                                              color: primaryWinFalExtraDarkColor
+                                              color: _waveActiveColor
                                                   .withOpacity(.8),
                                               offset: Offset(0, 10),
                                               blurRadius: 20)
@@ -315,17 +344,17 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                               1
                                             ],
                                             colors: [
-                                              secondaryWinFalColor,
-                                              secondaryWinFalColor,
-                                              secondaryWinFalDarkColor,
-                                              secondaryWinFalDarkColor
+                                              _bgLightPlayBtnColor,
+                                              _bgLightPlayBtnColor,
+                                              _bgDarkPlayBtnColor,
+                                              _bgDarkPlayBtnColor
                                             ])),
                                     child: Center(
                                         child: AnimatedIcon(
                                       progress: _animationController,
                                       icon: AnimatedIcons.play_pause,
-                                      size: 40,
-                                      color: primaryLightBackgroundColor,
+                                      size: 45,
+                                      color: _btnTextColor.withOpacity(1),
                                     )),
                                   ),
                                   type: MusicButtonType.PLAY),
@@ -336,8 +365,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                 onTap: () => musicBloc.add(
                                     MusicPlayerInNextPrevSong(nextSong: true)),
                                 child: SvgPicture.asset(_nextIcon,
-                                    color: primaryLightBackgroundColor,
-                                    height: 24),
+                                    color: _btnTextColor, height: 24),
                                 type: MusicButtonType.NEXT_SONG,
                               ),
                               Spacer(),
@@ -352,8 +380,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                     transform: Matrix4.rotationY(pi)
                                       ..rotateZ(-pi * 4 / 5),
                                     child: SvgPicture.asset(_skipIcon,
-                                        color: primaryLightBackgroundColor,
-                                        height: 20),
+                                        color: _btnTextColor, height: 20),
                                   ),
                                   type: MusicButtonType.SKIP_NEXT),
                               Spacer(),
@@ -363,8 +390,7 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                                 onTap: () =>
                                     musicBloc.add(MusicPlayerInShuffled()),
                                 child: SvgPicture.asset(_shuffleIcon,
-                                    color: primaryLightBackgroundColor,
-                                    height: 20),
+                                    color: _btnTextColor, height: 20),
                                 type: MusicButtonType.SHUFFLE,
                               )
                             ],
@@ -376,18 +402,21 @@ class _GeneralPlayoutState extends State<GeneralPlayout>
                             children: [
                               SvgPicture.asset(
                                 _bluetoothIcon,
-                                color: primaryLightBackgroundColor,
+                                color: _btnTextColor,
                                 height: 16,
                               ),
                               SIZED_BOX_W06,
                               Text(
                                 'Matt\'s AirPods Pro',
-                                style: Theme.of(context).textTheme.bodyText2,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    .copyWith(color: _btnTextColor),
                               ),
                               Spacer(),
                               SvgPicture.asset(
                                 _playlistIcon,
-                                color: primaryLightBackgroundColor,
+                                color: _btnTextColor,
                                 width: 20,
                               )
                             ],

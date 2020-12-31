@@ -18,8 +18,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final CurrentSongCubit currentSongCubit;
   final PositionSongCubit positionSongCubit;
   final RepeatAllOneCubit repeatAllOneCubit;
-  final List<SongInfo> playlist;
   static const int SKIP_MUSIC_SECONDS = 10;
+  List<SongInfo> playlist;
 
   int _duration = 0;
   int _position = 0;
@@ -27,14 +27,14 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   StreamSubscription<PositionSongState> _streamSubPosition;
   StreamSubscription<CurrentSongState> _streamSubCurrentSong;
 
-  MusicPlayerBloc(
-      {@required this.audioCache,
-      @required this.audioPlayer,
-      @required this.currentSongCubit,
-      @required this.positionSongCubit,
-      @required this.repeatAllOneCubit,
-      @required this.playlist})
-      : super(MusicPlayerInitial()) {
+  MusicPlayerBloc({
+    @required this.audioCache,
+    @required this.audioPlayer,
+    @required this.currentSongCubit,
+    @required this.positionSongCubit,
+    @required this.repeatAllOneCubit,
+  }) : super(MusicPlayerInitial()) {
+    // AUDIO PLAYER LISTENING
     audioPlayer.onPlayerStateChanged.listen((event) {
       switch (event) {
         case AudioPlayerState.PLAYING:
@@ -57,6 +57,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       _position = state.position;
     });
   }
+
+  // REMEMBER SET PLAYLIST BEFORE HANDLE ANYTHING TO AVOID ERRORS
+  setPlaylist(List<SongInfo> playlist) => this.playlist = playlist;
+
   @override
   Future<void> close() {
     _streamSubPosition.cancel();
@@ -86,9 +90,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   _getRepeatState(RepeatAllOneState state) => state is RepeatAll ? true : false;
 
-  Stream<MusicPlayerState> _mapNextPrevSkippedToState(
-      MusicPlayerInNextPrevSkipped event) async* {
-    _skipMusic(SKIP_MUSIC_SECONDS, event.skipNext);
+  Stream<MusicPlayerState> _mapStartedToState(
+      MusicPlayerInStarted event) async* {
+    _playMusic();
+    yield MusicPlayerPlaying();
   }
 
   Stream<MusicPlayerState> _mapNextPrevToState(
@@ -106,10 +111,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     yield MusicPlayerPlaying();
   }
 
-  Stream<MusicPlayerState> _mapStartedToState(
-      MusicPlayerInStarted event) async* {
-    _playMusic();
-    yield MusicPlayerPlaying();
+  Stream<MusicPlayerState> _mapNextPrevSkippedToState(
+      MusicPlayerInNextPrevSkipped event) async* {
+    _skipMusic(SKIP_MUSIC_SECONDS, event.skipNext);
   }
 
   Stream<MusicPlayerState> _mapPausedToState(MusicPlayerInPaused event) async* {
@@ -126,6 +130,50 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   Stream<MusicPlayerState> _mapShuffledToState(
       MusicPlayerInShuffled event) async* {
     _shuffleMusic();
+  }
+
+  // MUSIC PLAYER FUNCTION
+  _playMusic() =>
+      audioCache.play(_getFilePathSong(_currentSong % playlist.length));
+  _pauseMusic() => audioPlayer.pause();
+  _stopMuic() => audioPlayer.stop();
+  _shuffleMusic() => playlist.shuffle();
+
+  _skipMusic(int seconds, bool skipNext) => skipNext
+      ? audioPlayer.seek(Duration(
+          seconds:
+              _position <= (_duration - 10) ? _position + seconds : _duration))
+      : audioPlayer.seek(
+          Duration(seconds: _position >= seconds ? _position - seconds : 0));
+
+  // GET INFO FUNCTION
+  getNameSong(int current) => playlist[current % playlist.length].getName;
+
+  getAuthorSong(int current) => playlist[current % playlist.length].getAuthor;
+
+  getFormatTimer(int timer, {bool minus = false}) {
+    String syntax =
+        '${(timer / 60).floor().toString().padLeft(2, '0')}.${(timer % 60).toString().padLeft(2, '0')}';
+    return minus ? '-' + syntax : syntax;
+  }
+
+  // SONG HANDLED FUNCTION
+  Future<int> _getDuration(
+      String fileUrl, AudioPlayer audioPlayer, AudioCache audioCache) async {
+    File audio = await audioCache.load(fileUrl);
+    audioPlayer.setUrl(audio.path);
+    // Return duration as milliseconds
+    return ((await Future.delayed(
+                Duration(milliseconds: 300), () => audioPlayer.getDuration())) /
+            1000)
+        .floor();
+  }
+
+  getDuration() {
+    _getDuration(_getFilePathSong(_currentSong % playlist.length), audioPlayer,
+            audioCache)
+        .then((value) => _duration = value);
+    return _duration;
   }
 
   _getFilePathSong(int current) {
@@ -145,46 +193,5 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         break;
     }
     return urlSong += '${playlist[current].getName}.mp3';
-  }
-
-  _playMusic() =>
-      audioCache.play(_getFilePathSong(_currentSong % playlist.length));
-  _pauseMusic() => audioPlayer.pause();
-  _stopMuic() => audioPlayer.stop();
-  _shuffleMusic() => playlist.shuffle();
-
-  _skipMusic(int seconds, bool skipNext) => skipNext
-      ? audioPlayer.seek(Duration(
-          seconds:
-              _position <= (_duration - 10) ? _position + seconds : _duration))
-      : audioPlayer.seek(
-          Duration(seconds: _position >= seconds ? _position - seconds : 0));
-
-  getNameSong(int current) => playlist[current % playlist.length].getName;
-
-  getAuthorSong(int current) => playlist[current % playlist.length].getAuthor;
-
-  Future<int> _getDuration(
-      String fileUrl, AudioPlayer audioPlayer, AudioCache audioCache) async {
-    File audio = await audioCache.load(fileUrl);
-    audioPlayer.setUrl(audio.path);
-    // Return duration as milliseconds
-    return ((await Future.delayed(
-                Duration(milliseconds: 300), () => audioPlayer.getDuration())) /
-            1000)
-        .floor();
-  }
-
-  getDuration() {
-    _getDuration(_getFilePathSong(_currentSong % playlist.length), audioPlayer,
-            audioCache)
-        .then((value) => _duration = value);
-    return _duration;
-  }
-
-  getFormatTimer(int timer, {bool minus = false}) {
-    String syntax =
-        '${(timer / 60).floor().toString().padLeft(2, '0')}.${(timer % 60).toString().padLeft(2, '0')}';
-    return minus ? '-' + syntax : syntax;
   }
 }
