@@ -12,7 +12,7 @@ This is music player app that covered UX/UI was designed by [<img src="https://g
 - Can change season and get new playlist by horizontal swipe
 
 ## Demo
-[![Flutter Music Player](https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_chillhop_music_player.gif?raw=true)](http://www.youtube.com/watch?v=YjTZdafdzGw)
+[![Flutter Music Player](https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_chillhop_music_player.gif?raw=true)](https://youtu.be/GZWGsPzGlHs)
 
 ## Thank you
 
