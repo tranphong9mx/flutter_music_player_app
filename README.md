@@ -1,7 +1,7 @@
 # Flutter Music Player (Chillhop UI Cover)
 
 ## About
-This is a music player that covered UX/UI was designed by [<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_artitst.png?raw=true" width="60" >](https://www.facebook.com/ekkodesignas/) on [Ekkodesign.no](https://www.ekkodesign.no/)<br /><br />
+This is music player app that covered UX/UI was designed by [<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_artitst.png?raw=true" width="60" >](https://www.facebook.com/ekkodesignas/) on [Ekkodesign.no](https://www.ekkodesign.no/)<br /><br />
 [<img src="https://github.com/tranphong9mx/image_storing/blob/main/02_music_player/02_chillhop_music_player_thumbnail.png?raw=true" width="720" >](https://www.ekkodesign.no/)
 
 ## Layouts
