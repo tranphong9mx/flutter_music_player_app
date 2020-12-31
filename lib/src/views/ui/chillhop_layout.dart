@@ -59,10 +59,14 @@ class _ChillhopPlayoutState extends State<ChillhopPlayout>
 
   @override
   Widget build(BuildContext context) {
+    
+    // Change status color follow season
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: widget.seasonTheme['bgGradientColor']));
+    
     musicBloc = BlocProvider.of<MusicPlayerBloc>(context)
       ..setPlaylist(widget.playlist);
+    
     String _backgroundImage = widget.backgroundImage;
     // COLORS
     Color _bgGradientColor = widget.seasonTheme['bgGradientColor'];
