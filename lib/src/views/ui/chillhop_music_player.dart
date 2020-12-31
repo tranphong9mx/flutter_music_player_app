@@ -12,7 +12,8 @@ import 'package:flutter_music_player_app/src/bussiness_logic/data/example_data.d
 import 'package:flutter_music_player_app/src/bussiness_logic/models/song_info.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/constants.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/theme_customed.dart';
-import 'package:flutter_music_player_app/src/views/ui/chillhop_general_layout.dart';
+import 'package:flutter_music_player_app/src/views/ui/chillhop_layout.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 
 class ChillHopMusicPlayer extends StatelessWidget {
@@ -31,20 +32,20 @@ class ChillHopMusicPlayer extends StatelessWidget {
       }
     }
     List<Widget> _page = [
-      ChillhopGeneralPlayout(
+      ChillhopPlayout(
         seasonTheme: _themeMap[SeasonSong.WINTER],
         backgroundImage: 'assets/images/chillhop_winter.png',
         playlist: _songMap[0],
       ),
-      ChillhopGeneralPlayout(
+      ChillhopPlayout(
           seasonTheme: _themeMap[SeasonSong.SPRING],
           backgroundImage: 'assets/images/chillhop_spring.png',
           playlist: _songMap[1]),
-      ChillhopGeneralPlayout(
+      ChillhopPlayout(
           seasonTheme: _themeMap[SeasonSong.SUMMER],
           backgroundImage: 'assets/images/chillhop_summer.png',
           playlist: _songMap[2]),
-      ChillhopGeneralPlayout(
+      ChillhopPlayout(
           seasonTheme: _themeMap[SeasonSong.FALL],
           backgroundImage: 'assets/images/chillhop_fall.png',
           playlist: _songMap[3]),
@@ -63,9 +64,10 @@ class ChillHopMusicPlayer extends StatelessWidget {
             fullTransitionValue: 300,
             enableSlideIcon: true,
             waveType: WaveType.liquidReveal,
-            slideIconWidget: Icon(
-              Icons.arrow_back_ios,
-              color: primaryLightTextColor.withOpacity(0.8),
+            slideIconWidget: Padding(
+              padding: PAD_ONLY_R20,
+              child: SvgPicture.asset('assets/icons/backward_icon.svg',
+                  color: primaryLightTextColor.withOpacity(0.8)),
             ),
             positionSlideIcon: 0.3));
   }

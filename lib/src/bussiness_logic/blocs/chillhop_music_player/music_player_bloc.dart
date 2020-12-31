@@ -49,6 +49,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           break;
       }
     });
+
     _streamSubCurrentSong = currentSongCubit.listen((state) {
       _currentSong = state.counter;
     });

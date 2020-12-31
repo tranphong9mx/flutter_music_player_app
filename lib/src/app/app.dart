@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/utils/theme_customed.dart';
 import 'package:flutter_music_player_app/src/views/ui/chillhop_music_player.dart';
 

@@ -11,7 +11,6 @@ enum MusicButtonType {
   SHUFFLE,
   PLAY
 }
-
 class MusicEffectButton extends StatefulWidget {
   MusicEffectButton({
     Key key,
@@ -25,7 +24,6 @@ class MusicEffectButton extends StatefulWidget {
   @override
   _MusicEffectButtonState createState() => _MusicEffectButtonState();
 }
-
 class _MusicEffectButtonState extends State<MusicEffectButton>
     with TickerProviderStateMixin {
   static const _translateValue = 6.0;
@@ -57,6 +55,7 @@ class _MusicEffectButtonState extends State<MusicEffectButton>
     _controller.reverse();
   }
 
+  // Animation follow button type
   getWidget() {
     switch (widget.type) {
       case MusicButtonType.PREV_SONG:

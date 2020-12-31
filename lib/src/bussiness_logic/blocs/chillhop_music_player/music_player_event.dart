@@ -15,11 +15,6 @@ abstract class MusicPlayerEvent extends Equatable {
 // START
 class MusicPlayerInStarted extends MusicPlayerEvent {}
 
-class MusicPlayerInProgressed extends MusicPlayerEvent {
-  final int position;
-  MusicPlayerInProgressed({this.position});
-}
-
 // PAUSE & RESUME
 class MusicPlayerInResumed extends MusicPlayerEvent {}
 
@@ -32,13 +27,15 @@ class MusicPlayerInNextPrevSong extends MusicPlayerEvent {
   MusicPlayerInNextPrevSong({this.nextSong = true});
 }
 
-// STOP & SHUFFLE
-class MusicPlayerInStopped extends MusicPlayerEvent {}
-
-class MusicPlayerInShuffled extends MusicPlayerEvent {}
-
 // SKIP
 class MusicPlayerInNextPrevSkipped extends MusicPlayerEvent {
   final bool skipNext;
   MusicPlayerInNextPrevSkipped({this.skipNext = true});
 }
+
+// STOP & SHUFFLE
+class MusicPlayerInStopped extends MusicPlayerEvent {}
+
+class MusicPlayerInShuffled extends MusicPlayerEvent {}
+
+

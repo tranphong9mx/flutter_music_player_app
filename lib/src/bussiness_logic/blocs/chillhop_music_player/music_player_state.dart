@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-// ignore: must_be_immutable
 abstract class MusicPlayerState extends Equatable {
   MusicPlayerState();
   @override
