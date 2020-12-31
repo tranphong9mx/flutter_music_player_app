@@ -8,6 +8,7 @@ import 'package:flutter_music_player_app/src/bussiness_logic/utils/constants.dar
 import 'package:flutter_music_player_app/src/views/widgets/music_wave.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+// Use setState to update state (Original version)
 class GeneralPlayout extends StatefulWidget {
   const GeneralPlayout({Key key}) : super(key: key);
 

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_music_player/music_player_bloc.dart';
 import 'package:flutter_music_player_app/src/bussiness_logic/blocs/chillhop_music_player_bloc.dart';
@@ -12,8 +13,8 @@ import 'package:flutter_music_player_app/src/views/widgets/music_effect_button.d
 import 'package:flutter_music_player_app/src/views/widgets/music_wave.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChillhopGeneralPlayout extends StatefulWidget {
-  const ChillhopGeneralPlayout(
+class ChillhopPlayout extends StatefulWidget {
+  const ChillhopPlayout(
       {Key key,
       @required this.seasonTheme,
       @required this.backgroundImage,
@@ -23,10 +24,10 @@ class ChillhopGeneralPlayout extends StatefulWidget {
   final String backgroundImage;
   final List<SongInfo> playlist;
   @override
-  _ChillhopGeneralPlayoutState createState() => _ChillhopGeneralPlayoutState();
+  _ChillhopPlayoutState createState() => _ChillhopPlayoutState();
 }
 
-class _ChillhopGeneralPlayoutState extends State<ChillhopGeneralPlayout>
+class _ChillhopPlayoutState extends State<ChillhopPlayout>
     with TickerProviderStateMixin {
   AnimationController _animationController;
   MusicPlayerBloc musicBloc;
@@ -58,6 +59,8 @@ class _ChillhopGeneralPlayoutState extends State<ChillhopGeneralPlayout>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: widget.seasonTheme['bgGradientColor']));
     musicBloc = BlocProvider.of<MusicPlayerBloc>(context)
       ..setPlaylist(widget.playlist);
     String _backgroundImage = widget.backgroundImage;
@@ -248,7 +251,8 @@ class _ChillhopGeneralPlayoutState extends State<ChillhopGeneralPlayout>
                                     duration: _duration,
                                     position: state.position,
                                     activeColor: _waveActiveColor,
-                                    inActiveColor: _btnTextColor.withOpacity(.6),
+                                    inActiveColor:
+                                        _btnTextColor.withOpacity(.6),
                                   ),
                                   SizedBox(
                                     width: 64,

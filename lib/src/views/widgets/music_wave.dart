@@ -16,6 +16,7 @@ class MusicWave extends StatefulWidget {
   _MusicWaveState createState() => _MusicWaveState();
 }
 
+// Height of Wave
 class _MusicWaveState extends State<MusicWave> {
   final List<double> _listWave = [
     6,
